@@ -1,0 +1,71 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  	<meta charset="utf-8">
+
+  	<title>Knockout CSS Components</title>
+
+</head>
+
+<body>
+
+	<div class="container">
+		<h1>Knockout CSS Components</h1>
+		<p>A binding to allow component specific CSS stylings</p>
+
+		<!-- ko template: { name: 't_item', foreach: items } --><!-- /ko -->
+
+		<!-- ko template: { name: 't_thing', foreach: items } --><!-- /ko -->
+
+	</div>
+
+	<script id="t_item" type="text/template">
+		<div data-bind="component: true" data-component-style="
+			.title {
+				background: blue;
+				color: white;
+			} 
+			.description {
+				text-decoration: underline;
+			}
+
+			.colourGreen {
+			   color: green;
+			}
+		">
+			<h2 class="title" data-bind="text: title"></h2>
+			<h3 class="description" data-bind="text: description"></h3>
+			<h3 class="description" data-bind="text: description"></h3>
+		</div>
+	</script>
+
+	<script id="t_thing" type="text/template">
+		<div data-bind="component: true" data-component-style="
+			.title {
+				background: red;
+				color: white;
+			}
+		">
+			<h2 class="title" data-bind="text: title"></h2>
+			<h3 class="description" data-bind="text: description"></h3>
+			<h3 class="description" data-bind="text: description"></h3>
+		</div>
+	</script>
+
+	<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+	<script src="http://knockoutjs.com/downloads/knockout-3.4.0.debug.js"></script>
+	<script src="js/bindings.js"></script>
+  	<script src="js/CCSS.js"></script>
+  	<script src="js/CCSS.viewModel.js"></script>
+
+  	<script>
+  		$(function() {
+  			var viewModel = CCSS.viewModel();
+  			ko.applyBindings(viewModel, $('.container')[0]);
+
+  			CCSS.generateComponents();
+  		});
+  	</script>
+</body>
+</html>
