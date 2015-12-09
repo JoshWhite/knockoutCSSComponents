@@ -1,13 +1,20 @@
 ko.bindingHandlers.cssComponent = {
     init: function(element, valueAccessor) {
     	var self = ko.bindingHandlers.cssComponent;
-    	var style = $(element).data('component-style');
+
+    	// get style with type="text/template" to prevent DOM remdering it
+    	var style = $(element).find('style[type="text/template"]').html();
+
+    	if(style === undefined) {
+    		throw 'No style tag with type "text/template" found';
+    	}
 
     	// create component and return unique hash
-        var hash = self.CCSS().createComponent(style);
+    	var hash = self.CCSS().createComponent(style);
 
         // add hash as class to all children
-        $(element).children().addClass(hash);
+        // debugger;
+        $(element).find('*').addClass(hash);
 
         // if component doesn't exist, create, else increment count
         if(self.components[hash].count === 0) {
@@ -19,6 +26,9 @@ ko.bindingHandlers.cssComponent = {
 
         // replace data attr with unique hash
         $(element).data('component-style', hash);
+
+        // remove style blocks
+        $(element).find('style').remove();
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
 

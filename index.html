@@ -33,45 +33,54 @@
 	</div>
 
 	<script id="t_item" type="text/template">
-		<div data-bind="cssComponent: true" data-component-style="
-			.title, h3 {
-				background: blue;
-				color: white;
-			}
+		<div data-bind="cssComponent: true">
+			<style type="text/template">
+				.title, h3 {
+					background: blue;
+					color: white;
+				}
 
-			.title:hover {
-				text-decoration: underline;
-			}
+				.title:hover {
+					text-decoration: underline;
+				}
 
-			.description {
-				text-decoration: underline;
-			}
+				.description {
+					text-decoration: underline;
+				}
 
-			.blue {
-			   color: blue;
-			}
+				.blue {
+				   color: blue;
+				}
 
-		">
+			</style>
+
 			<h2 class="title" data-bind="text: title"></h2>
+
 			<h3 class="description" data-bind="text: description"></h3>
-			<h3 class="margin-left-10 description">
-				test 
-				<span class="blue" data-bind="text: description"></span>
-			</h3>
+
+			<span class="blue" data-bind="text: description"></span>
 
 			<button data-bind="click: remove">Remove</button>
 		</div>
 	</script>
 
 	<script id="t_thing" type="text/template">
-		<div data-bind="cssComponent: true"  data-component-style="
-			
-			.title {
-				background: red;
-				color: white;
-			}
-		">
-			<h2 class="title" data-bind="text: title"></h2>
+		<div data-bind="cssComponent: true">
+			<style type="text/template">
+				.title {
+					background: red;
+					color: white;
+				}
+
+				.title .yellow {
+					color: yellow
+				}
+			</style>
+
+			<h2 class="title" >
+				test
+				<span class="yellow" data-bind="text: title"></span>
+			</h2>
 			<h3 class="description" data-bind="text: description"></h3>
 			<h3 class="description" data-bind="text: description"></h3>
 		</div>
