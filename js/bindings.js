@@ -47,6 +47,7 @@ ko.bindingHandlers.cssComponent = {
 
     CCSS: function () {
 	
+		var pseudoSelectorRegex = /(before|after|hover|nth|focus|checked|disabled|last-child|first-child|visited|active)/;
 		var components = ko.bindingHandlers.cssComponent.components;
 
 		return {
@@ -75,8 +76,28 @@ ko.bindingHandlers.cssComponent = {
 					var prependedSelectors = selectors
 						.trim()
 						.split(',')
-						.map(function(selector) { 
-							return selector.trim() + '.' + hash;
+						.map(function(selector) {
+							// check for pseudo selecors
+							if(selector.match(':') === null) {
+								// append hash
+								return selector.trim() + '.' + hash;	
+							}
+							else {
+								return selector
+									// split pseudos from selector
+									// append hash's to rules, not selectors
+									.split(':')
+									.map(function(rule) {
+										if(rule.match(pseudoSelectorRegex) === null) {
+											return rule + '.' + hash;
+										}
+										else {
+											return ':' + rule;
+										}
+									})
+									.join('');
+							}
+							
 						});
 
 					return prependedSelectors.join(',') + '{' + rule + '}';
