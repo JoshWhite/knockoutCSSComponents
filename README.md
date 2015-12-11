@@ -1,6 +1,8 @@
 # KnockoutCSSComponents
 A knockout binding to allow component specific CSS stylings
 
+- Currently no support for media queries
+- Still in dev, so may be breaking changes!
 
 Example of use:
 
