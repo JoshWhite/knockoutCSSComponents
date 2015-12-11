@@ -10,15 +10,14 @@ ko.bindingHandlers.cssComponent = {
     	}
 
     	// create component and return unique hash
-    	var hash = self.CCSS().createComponent(style);
+    	var hash = self.componentFactory().createComponent(style);
 
         // add hash as class to all children
-        // debugger;
         $(element).find('*').addClass(hash);
 
         // if component doesn't exist, create, else increment count
         if(self.components[hash].count === 0) {
-        	self.CCSS().addComponentStyleToHead(hash);
+        	self.componentFactory().addComponentStyleToHead(hash);
         }
         else {
         	self.components[hash].count++;
@@ -45,7 +44,7 @@ ko.bindingHandlers.cssComponent = {
 
     components: {},
 
-    CCSS: function () {
+    componentFactory: function () {
 	
 		var pseudoSelectorRegex = /(before|after|hover|nth|focus|checked|disabled|last-child|first-child|visited|active)/;
 		var components = ko.bindingHandlers.cssComponent.components;
@@ -60,57 +59,60 @@ ko.bindingHandlers.cssComponent = {
 			//Removes newlines
 			var parsedCss = css.replace(/(\r\n|\n|\r)/gm,"");
 
-			//create unique component class with prefix and css string
-			var hash = '__CCSS__' + this.generateStringhashCode(parsedCss);
-			
-			//split into array of CSS rules (won't work with media queries)
-			var cssRulesArray = parsedCss.split('}');
-
-			// add hash to each selector in rule 
-			// returns array of strings containing the rules + selector
-			var componentRules = cssRulesArray.map(function(cssLine) {
-				var trimmedCssLine = cssLine.trim();
-				if(trimmedCssLine !== "") {
-					var selectors = trimmedCssLine.split('{')[0].trim();
-					var rule = trimmedCssLine.split('{')[1].trim();
-					var prependedSelectors = selectors
-						.trim()
-						.split(',')
-						.map(function(selector) {
-							// check for pseudo selecors
-							if(selector.match(':') === null) {
-								// append hash
-								return selector.trim() + '.' + hash;	
-							}
-							else {
-								return selector
-									// split pseudos from selector
-									// append hash's to rules, not selectors
-									.split(':')
-									.map(function(rule) {
-										if(rule.match(pseudoSelectorRegex) === null) {
-											return rule + '.' + hash;
-										}
-										else {
-											return ':' + rule;
-										}
-									})
-									.join('');
-							}
-							
-						});
-
-					return prependedSelectors.join(',') + '{' + rule + '}';
-				}
-			});
+			//create unique component hash with with prefix
+			var hash = '__component__' + this.generateStringhashCode(parsedCss);
 
 			// if component doesn't already exist, add it to components object
 			if(components[hash] === undefined) {
+			
+				//split into array of CSS rules (won't work with media queries)
+				var cssRulesArray = parsedCss.split('}');
+
+				// add hash to each selector in rule 
+				// returns array of strings containing the rules + selector
+				var componentRules = cssRulesArray.map(function(cssLine) {
+					var trimmedCssLine = cssLine.trim();
+					if(trimmedCssLine !== "") {
+						var selectors = trimmedCssLine.split('{')[0].trim();
+						var rule = trimmedCssLine.split('{')[1].trim();
+						var prependedSelectors = selectors
+							.trim()
+							.split(',')
+							.map(function(selector) {
+								// check for pseudo selecors
+								if(selector.match(':') === null) {
+									// append hash
+									return selector.trim() + '.' + hash;	
+								}
+								else {
+									return selector
+										// split pseudos from selector
+										// append hash's to rules, not selectors
+										.split(':')
+										.map(function(rule) {
+											if(rule.match(pseudoSelectorRegex) === null) {
+												return rule + '.' + hash;
+											}
+											else {
+												return ':' + rule;
+											}
+										})
+										.join('');
+								}
+								
+							});
+
+						return prependedSelectors.join(',') + '{' + rule + '}';
+					}
+				});
+
+				//Add to components object
 				components[hash] = {
 					element: null,
 					count: 0,
 					css: componentRules.join('')
 				};
+
 			}
 
 			// returns component hash

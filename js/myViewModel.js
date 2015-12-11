@@ -1,26 +1,8 @@
-var CCSS = {};
-
-CCSS.viewModel = function(options) {
+var myViewModel = function(options) {
 
 	'use strict';
 
 	var itemArray = ko.observableArray([
-		{
-			title: "1",
-			description: "something about 1"	
-		},
-		{
-			title: "2",
-			description: "something about 2"
-		},
-		{
-			title: "3",
-			description: "something about 3"
-		}
-
-	]);
-
-	var thingArray = ko.observableArray([
 		{
 			title: "1",
 			description: "something about 1"	
@@ -42,7 +24,6 @@ CCSS.viewModel = function(options) {
 
 	return {
 		items: itemArray,
-		things: thingArray,
 		add: add
 	}
 
@@ -54,8 +35,8 @@ CCSS.viewModel = function(options) {
 
 		itemArray.push(itemFactory(
 			{
-				title: "newItem",
-				description: "new description!!!!"
+				title: "New Item",
+				description: "new description!"
 			}
 		));
 	}

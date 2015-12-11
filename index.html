@@ -21,79 +21,40 @@
 <body>
 
 	<div class="container">
-		<h1>Knockout CSS Components</h1>
+		<h1 class="title">Knockout CSS Components</h1>
 		<p>A binding to allow component specific CSS stylings</p>
 
 		<button data-bind="click: add">Add New Item</button>
 
 		<!-- ko template: { name: 't_item', foreach: items } --><!-- /ko -->
 
-		<!-- ko template: { name: 't_thing', foreach: things } --><!-- /ko -->
-
 	</div>
 
 	<script id="t_item" type="text/template">
 		<div data-bind="cssComponent: true">
+
 			<style type="text/template">
-				.title, h3 {
-					background: blue;
-					color: white;
-				}
-
-				.title:hover {
+				.title {
 					text-decoration: underline;
 				}
-
-				.description {
-					text-decoration: underline;
-				}
-
-				.blue {
-				   color: blue;
-				}
-
 			</style>
 
 			<h2 class="title" data-bind="text: title"></h2>
 
-			<h3 class="description" data-bind="text: description"></h3>
-
-			<span class="blue" data-bind="text: description"></span>
+			<p class="description" data-bind="text: description"></p>
 
 			<button data-bind="click: remove">Remove</button>
 		</div>
 	</script>
 
-	<script id="t_thing" type="text/template">
-		<div data-bind="cssComponent: true">
-			<style type="text/template">
-				.title {
-					background: red;
-					color: white;
-				}
-
-				.title .yellow {
-					color: yellow
-				}
-			</style>
-
-			<h2 class="title" >
-				test
-				<span class="yellow" data-bind="text: title"></span>
-			</h2>
-			<h3 class="description" data-bind="text: description"></h3>
-			<h3 class="description" data-bind="text: description"></h3>
-		</div>
-	</script>
-
 	<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 	<script src="http://knockoutjs.com/downloads/knockout-3.4.0.debug.js"></script>
-	<script src="js/bindings.js"></script>
-  	<script src="js/CCSS.viewModel.js"></script>
+	<script src="js/cssComponentBinding.js"></script>
+  	<script src="js/myViewModel.js"></script>
 
   	<script>
   		$(function() {
-  			var viewModel = CCSS.viewModel();
+  			var viewModel = myViewModel();
   			ko.applyBindings(viewModel, $('.container')[0]);
   		});
   	</script>
