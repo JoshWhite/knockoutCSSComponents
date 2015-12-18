@@ -45,8 +45,6 @@ ko.bindingHandlers.cssComponent = {
     components: {},
 
     componentFactory: function () {
-
-        var pseudoSelectorRegex = /(before|after|hover|nth|focus|checked|disabled|last-child|first-child|visited|active)/;
         var components = ko.bindingHandlers.cssComponent.components;
 
         return {
@@ -56,8 +54,8 @@ ko.bindingHandlers.cssComponent = {
         }
 
         function createComponent(css) {
-            //Removes newlines
-            var parsedCss = css.replace(/(\r\n|\n|\r)/gm, "");
+             //Removes newlines & comments
+            var parsedCss = css.replace(/(\r\n|\n|\r)|(\/\*(\n|.)+?\*\/|\/\/.*(?=[\n\r]))/gm, "");
 
             //create unique component hash with with prefix
             var hash = '__component__' + this.generateStringhashCode(parsedCss);
@@ -78,7 +76,7 @@ ko.bindingHandlers.cssComponent = {
                         var prependedSelectors = selectors
 							.trim()
 							.split(',')
-							.map(function (selector) {
+							.map(function (selector) {                                
 						        // special selector for targetting the root element
                                 if(selector.trim() === "._root") {
                                     return '.' + hash;  
