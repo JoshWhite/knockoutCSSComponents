@@ -6,7 +6,7 @@
   	<title>Knockout CSS Components</title>
 </head>
 
-<style>
+<style >
 	
 	.title {
 		font-size: 200%;
@@ -25,18 +25,30 @@
 		<p>A binding to allow component specific CSS stylings</p>
 
 		<button data-bind="click: add">Add New Item</button>
-
+		
 		<!-- ko template: { name: 't_item', foreach: items } --><!-- /ko -->
 
 	</div>
 
 	<script id="t_item" type="text/template">
-		<div data-bind="cssComponent: true">
+		<div data-bind="cssComponent: 'item'">
 
 			<style type="text/template">
 				.title {
 					text-decoration: underline;
 				}
+				
+
+				@media screen {
+					.title {
+						font-style: italic;
+					}
+
+					p {
+						color: red;
+					}
+				}
+
 			</style>
 
 			<h2 class="title" data-bind="text: title"></h2>

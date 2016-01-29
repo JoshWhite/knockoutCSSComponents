@@ -10,7 +10,7 @@ ko.bindingHandlers.cssComponent = {
         }
 
         // create component and return unique hash
-        var hash = self.componentFactory().createComponent(style);
+        var hash = self.componentFactory().createComponent(style, valueAccessor());
 
         // add "_root" & hash as class 
         element.className = element.className + ' ' + hash;
@@ -53,25 +53,53 @@ ko.bindingHandlers.cssComponent = {
             generateStringhashCode: generateStringhashCode
         }
 
-        function createComponent(css) {
+        function createComponent(css, name) {
              //Removes newlines & comments
             var parsedCss = css.replace(/(\r\n|\n|\r)|(\/\*(\n|.)+?\*\/|\/\/.*(?=[\n\r]))/gm, "");
 
+            var componentName = typeof name === 'string' ? '__' + name + '__' : '__component__';
+
             //create unique component hash with with prefix
-            var hash = '__component__' + this.generateStringhashCode(parsedCss);
+            var hash = componentName + this.generateStringhashCode(parsedCss);
 
             // if component doesn't already exist, add it to components object
             if (components[hash] === undefined) {
 
                 //split into array of CSS rules (won't work with media queries)
-                var cssRulesArray = parsedCss.split('}');
+                var queries = parsedCss.split(/(?=@media)/);
+
+                var newQueries = queries.map(function(line) {
+                	if(line.match(/@media/)) {
+                		var querySelector = line.split(/(?={)/).shift();
+                		var queryRules = line
+                							.split(/(?:{)([\s\S]*)(?:})/)[1]
+                							.split('}')
+                							.map(mappingFunction)
+                							.join('');
+
+                		return querySelector + '{' + queryRules + '}';
+
+                	} 
+                	else {
+                		return line;
+                	}
+                }).join('');
+
+                debugger;
+
+				var cssRulesArray = parsedCss.split('}');
 
                 // add hash to each selector in rule 
                 // returns array of strings containing the rules + selector
-                var componentRules = cssRulesArray.map(function (cssLine) {
+                var componentRules = cssRulesArray.map(mappingFunction);
+
+                function mappingFunction(cssLine) {
                     var trimmedCssLine = cssLine.trim();
+                    if(trimmedCssLine.match(/@media/)) {
+                    	return cssLine + '}}';
+                    }
                     if (trimmedCssLine !== "") {
-                        var selectors = trimmedCssLine.split('{')[0].trim();
+						var selectors = trimmedCssLine.split('{')[0].trim();
                         var rule = trimmedCssLine.split('{')[1].trim();
                         var prependedSelectors = selectors
 							.trim()
@@ -89,7 +117,7 @@ ko.bindingHandlers.cssComponent = {
 
                         return prependedSelectors.join(',') + '{' + rule + '}';
                     }
-                });
+                }
 
                 //Add to components object
                 components[hash] = {
