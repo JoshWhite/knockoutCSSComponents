@@ -93,7 +93,7 @@ ko.bindingHandlers.cssComponent = {
         /* Private functions 
         ------------------------------------------ */
         function createComponent(css, label) {
-             //Removes newlines & comments
+            //Removes newlines & comments
             var parsedCss = css.replace(/(\r\n|\n|\r)|(\/\*(\n|.)+?\*\/|\/\/.*(?=[\n\r]))/gm, ""),
                 mediaQueries = [],
                 noMediaQueryCss, styleBlock;
@@ -106,27 +106,6 @@ ko.bindingHandlers.cssComponent = {
                 return;
             }
             else {
-
-                //split into array of CSS styleBlock (won't work with media queries)
-                // var queries = parsedCss.split(/(?=@media)/);
-
-                // var newQueries = queries.map(function(line) {
-                // 	if(line.match(/@media/)) {
-                // 		var querySelector = line.split(/(?={)/).shift();
-                // 		var queryRules = line
-                // 							.split(/(?:{)([\s\S]*)(?:})/)[1]
-                // 							.split('}')
-                // 							.map(mappingFunction)
-                // 							.join('');
-
-                // 		return querySelector + '{' + queryRules + '}';
-
-                // 	} 
-                // 	else {
-                // 		return line;
-                // 	}
-                // }).join('');
-
                 noMediaQueryCss = extractMediaQueries(parsedCss, mediaQueries);
 
                 styleBlock = mapCss(noMediaQueryCss, mediaQueries);
