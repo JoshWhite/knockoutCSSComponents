@@ -1,8 +1,8 @@
 # KnockoutCSSComponents
 A knockout binding to allow component specific CSS stylings
 
-- Currently no support for media queries
 - Still in dev, so may be breaking changes!
+- Added support for media queries :)
 
 Example of use:
 
@@ -16,7 +16,7 @@ Example of use:
 
 <h1 class="title">Non Component Title</h1>
 
-<div data-bind="cssComponent: true">
+<div data-bind="cssComponent: 'myComponent'">
 	<style type="text/template">
 		/* this rule will only affect elements with .title inside this component */
 	  	.title {
