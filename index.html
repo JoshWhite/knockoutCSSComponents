@@ -35,17 +35,14 @@
 
 			<style type="text/template">
 				.title {
-					text-decoration: underline;
+					color: red;
 				}
 				
 
-				@media screen {
+				@media (max-width: 600px) {
 					.title {
 						font-style: italic;
-					}
-
-					p {
-						color: red;
+						color: blue;
 					}
 				}
 
@@ -54,6 +51,9 @@
 			<h2 class="title" data-bind="text: title"></h2>
 
 			<p class="description" data-bind="text: description"></p>
+
+			<p class="between"></p>
+			<p class="after"></p>
 
 			<button data-bind="click: remove">Remove</button>
 		</div>
