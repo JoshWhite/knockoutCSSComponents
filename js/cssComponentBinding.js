@@ -5,12 +5,14 @@ ko.bindingHandlers.cssComponent = {
         // get style with type="text/template" to prevent DOM remdering it
         var style = $(element).find('style[type="text/template"]').html();
 
+        var componentName = typeof valueAccessor() === 'string' ? valueAccessor() : null;
+
         if (style === undefined) {
             throw 'No style tag with type "text/template" found';
         }
 
         // create component and return unique hash
-        var hash = self.componentFactory().createComponent(style);
+        var hash = self.componentFactory().createComponent(style, componentName);
 
         // add "_root" & hash as class 
         element.className = element.className + ' ' + hash;
@@ -57,8 +59,10 @@ ko.bindingHandlers.cssComponent = {
              //Removes newlines & comments
             var parsedCss = css.replace(/(\r\n|\n|\r)|(\/\*(\n|.)+?\*\/|\/\/.*(?=[\n\r]))/gm, "");
 
+            var componentName = name ? '__' + name + '__' : '__component__';
+
             //create unique component hash with with prefix
-            var hash = '__component__' + this.generateStringhashCode(parsedCss);
+            var hash = componentName + this.generateStringhashCode(parsedCss);
 
             // if component doesn't already exist, add it to components object
             if (components[hash] === undefined) {
