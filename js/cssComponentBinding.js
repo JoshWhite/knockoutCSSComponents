@@ -93,19 +93,22 @@ ko.bindingHandlers.cssComponent = {
         /* Private functions 
         ------------------------------------------ */
         function createComponent(css, label) {
-            //Removes newlines & comments
-            var parsedCss = css.replace(/(\r\n|\n|\r)|(\/\*(\n|.)+?\*\/|\/\/.*(?=[\n\r]))/gm, ""),
-                mediaQueries = [],
-                noMediaQueryCss, styleBlock;
+
+            var mediaQueries = [],
+                parsedCss, noMediaQueryCss, styleBlock;
 
             //create unique component hash with with prefix
-            hash = label + generateStringhashCode(parsedCss);
+            hash = label + generateStringhashCode(css.substring(0, 1000));
 
             // if component doesn't already exist, create & add it to componentStore object
             if (componentStore[hash] !== undefined) {
                 return;
             }
             else {
+
+                //Removes newlines & comments
+                parsedCss = css.replace(/(\r\n|\n|\r)|(\/\*(\n|.)+?\*\/|\/\/.*(?=[\n\r]))/gm, "");
+
                 noMediaQueryCss = extractMediaQueries(parsedCss, mediaQueries);
 
                 styleBlock = mapCss(noMediaQueryCss, mediaQueries);
@@ -151,7 +154,7 @@ ko.bindingHandlers.cssComponent = {
                         selectors;
 
                     if(trimmedCssLine.match('PLACEHOLDER')) {
-                        return mediaQueries.shift();    
+                        return mediaQueries.shift();
                     }
 
                     if (trimmedCssLine !== "") {
