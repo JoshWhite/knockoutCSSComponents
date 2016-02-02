@@ -2,7 +2,7 @@ ko.bindingHandlers.cssComponent = {
     init: function (element, valueAccessor) {
         var self = ko.bindingHandlers.cssComponent,
             // get style with type="text/template" to prevent DOM remdering it
-            style = $(element).find('style[type="text/template"]').html(),
+            style = $(element).children('style[type="text/template"]').html(),
             componentLabel, component;
 
         if (style === undefined) {
@@ -22,7 +22,7 @@ ko.bindingHandlers.cssComponent = {
         component.addComponentStyleToHead();
 
         // remove style blocks from element
-        $(element).find('style').remove();
+        $(element).children('style').remove();
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
             // remove from head if needed
@@ -165,8 +165,8 @@ ko.bindingHandlers.cssComponent = {
                             .split(',')
                             .map(function (selector) {                                
                                 // special selector for targetting the root element
-                                if(selector.trim() === "._root") {
-                                    return '.' + hash;  
+                                if (selector.trim().match("._root")) {
+                                    return selector.replace('_root', hash);
                                 }
                                 //prepend every selector with the hash as a class
                                 else {
