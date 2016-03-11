@@ -1,9 +1,11 @@
 ko.bindingHandlers.cssComponent = {
     init: function (element, valueAccessor) {
         var self = ko.bindingHandlers.cssComponent,
-            // get style with type="text/template" to prevent DOM remdering it
-            style = $(element).children('style[type="text/template"]').html(),
-            componentLabel, component;
+            // find all style blocks in element
+            styleBlocks = element.getElementsByTagName('style'),
+            // get CSS from first style node with type text/template
+            style = styleBlocks && styleBlocks[0].type === 'text/template' ? styleBlocks[0].innerHTML : undefined,
+            componentLabel, component, node;
 
         if (style === undefined) {
             throw 'No style tag with type "text/template" found';
@@ -20,9 +22,11 @@ ko.bindingHandlers.cssComponent = {
 
         // add to head unless it already exists
         component.addComponentStyleToHead();
-
-        // remove style blocks from element
-        $(element).children('style').remove();
+        
+        // remove style nodes
+        for (node = 0; node < styleBlocks.length; node++) {
+            element.removeChild(styleBlocks[node]);
+        }
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
             // remove from head if needed
