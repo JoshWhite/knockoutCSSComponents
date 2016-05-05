@@ -3,14 +3,19 @@ ko.bindingHandlers.cssComponent = {
         var self = ko.bindingHandlers.cssComponent,
             // get style with type="text/template" to prevent DOM remdering it
             style = $(element).children('style[type="text/template"]').html(),
+            hasLabel = typeof valueAccessor() === 'string',
             componentLabel, component;
 
-        if (style === undefined) {
-            throw 'No style tag with type "text/template" found';
+        if(hasLabel === false) {
+            throw 'cssComponent missing label. Add string identifier to binding\'s value, eg: "my-component"';
         }
 
         // default name to __component__
-        componentLabel  = typeof valueAccessor() === 'string' ? '__' + valueAccessor() + '__' : '__component__';
+        componentLabel = hasLabel ? '__' + valueAccessor() + '__' : '__component__';
+
+        if (style === undefined) {
+            throw 'No style tag with type "text/template" found: ' + componentLabel;
+        }
 
         // create component
         component = self.componentFactory(style, componentLabel);
@@ -33,7 +38,7 @@ ko.bindingHandlers.cssComponent = {
 
     componentStore: {},
 
-    componentFactory: function (css, label) {
+    componentFactory: function componentFactory(css, label) {
         var componentStore = ko.bindingHandlers.cssComponent.componentStore,
             hash;
 
@@ -54,7 +59,7 @@ ko.bindingHandlers.cssComponent = {
                 css = component.css,
                 head, styleBlock;
 
-            if(component.count === 0) {
+            if (component.count === 0) {
 
                 // adapted from http://stackoverflow.com/a/524721
                 head = document.head || document.getElementsByTagName('head')[0];
@@ -122,12 +127,12 @@ ko.bindingHandlers.cssComponent = {
             return css
                 //split by media queries
                 .split(/(@media[^{]*{(?:(?!}\s*}).)*}.*?})/)
-                .map(function(line) {
+                .map(function (line) {
                     var querySelector, queryRules;
 
                     // add mappedCss inside queries to containing array
                     // replace with placeholder
-                    if(line.match(/@media/)) {
+                    if (line.match(/@media/)) {
                         querySelector = line.split(/(?={)/).shift();
                         queryRules = mapCss(line.split(/@media[^{]+\{([\s\S]+?\})\s*\}/)[1]);
 
@@ -135,11 +140,11 @@ ko.bindingHandlers.cssComponent = {
 
                         return 'PLACEHOLDER }';
 
-                     } 
-                     // return line without modifying
-                     else {
-                         return line;
-                     }
+                    }
+                        // return line without modifying
+                    else {
+                        return line;
+                    }
                 })
                 .join('');
         }
@@ -149,11 +154,11 @@ ko.bindingHandlers.cssComponent = {
             // return component style block
             return css
                 .split('}')
-                .map(function(cssLine) {
+                .map(function (cssLine) {
                     var trimmedCssLine = cssLine.trim(),
                         selectors;
 
-                    if(trimmedCssLine.match('PLACEHOLDER')) {
+                    if (trimmedCssLine.match('PLACEHOLDER')) {
                         return mediaQueries.shift();
                     }
 
@@ -163,12 +168,12 @@ ko.bindingHandlers.cssComponent = {
                         prependedSelectors = selectors
                             .trim()
                             .split(',')
-                            .map(function (selector) {                                
+                            .map(function (selector) {
                                 // special selector for targetting the root element
                                 if (selector.trim().match("._root")) {
                                     return selector.replace('_root', hash);
                                 }
-                                //prepend every selector with the hash as a class
+                                    //prepend every selector with the hash as a class
                                 else {
                                     return '.' + hash + ' ' + selector.trim();
                                 }
