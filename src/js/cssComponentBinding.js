@@ -215,3 +215,5 @@ ko.bindingHandlers.cssComponent = {
 
     }
 };
+
+exports.binding = ko.bindingHandlers.cssComponent;
