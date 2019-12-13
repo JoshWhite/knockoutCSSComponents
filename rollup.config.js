@@ -1,3 +1,5 @@
+import babel from 'rollup-plugin-babel';
+
 export default {
     input: 'src/index.js',
 
@@ -11,4 +13,13 @@ export default {
       // default, all dependencies will be watched
       exclude: ['node_modules/**'],
     },
+
+    plugins: [
+        babel({
+            exclude: 'node_modules/**',
+            presets: [
+                '@babel/preset-env',
+            ],
+        }),
+    ],
   };

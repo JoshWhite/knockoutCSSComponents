@@ -11,13 +11,13 @@ module.exports = function (wallaby) {
 
       env: {
         type: 'node',
-        runner: 'node'
+        runner: 'node',
       },
 
       debug: true,
   
       compilers: {
-        '**/*.js?(x)': wallaby.compilers.babel()
+        '**/*.js?(x)': wallaby.compilers.babel(),
       },
 
       testFramework: 'jest',

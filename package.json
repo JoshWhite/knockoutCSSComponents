@@ -1,8 +1,8 @@
 {
-  "name": "knockoutcsscomponents",
+  "name": "knockout-css-components",
   "version": "1.0.0",
   "description": "KO binding to scope CSS to an element",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "example": "example"
   },
@@ -34,9 +34,11 @@
     "eslint": "^6.7.2",
     "eslint-plugin-jest": "^23.1.1",
     "jest": "^24.9.0",
-    "rollup": "^1.27.12"
+    "rollup": "^1.27.12",
+    "rollup-plugin-babel": "^4.3.3"
   },
   "peerDependencies": {
-    "knockout": "^3.5.1"
+    "knockout": "^3.5.1",
+    "jQuery": "^1.7.4"
   }
 }
