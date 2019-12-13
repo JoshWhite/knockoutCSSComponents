@@ -1,9 +1,8 @@
 module.exports = function (wallaby) {
     return {
       files: [
-          'test.js',
-        // 'js/**/*.js',
-        // '!js/**/*.test.js',
+        'js/**/*.js',
+        '!js/**/*.test.js',
       ],
  
       tests: [
