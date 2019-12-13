@@ -1,8 +1,8 @@
 {
-  "name": "knockout-css-components",
-  "version": "1.0.0",
+  "name": "knockout-css-component-binding",
+  "version": "0.0.2",
   "description": "KO binding to scope CSS to an element",
-  "main": "dist/index.js",
+  "main": "dist/bundle.js",
   "directories": {
     "example": "example"
   },
