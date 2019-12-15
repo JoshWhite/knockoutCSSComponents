@@ -1,6 +1,6 @@
 {
   "name": "knockout-css-component-binding",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "KO binding to scope CSS to an element",
   "main": "dist/bundle.js",
   "directories": {
@@ -8,6 +8,8 @@
   },
   "scripts": {
     "start": "rollup -c -w",
+    "build:prod": "rollup -c --environment BUILD:prod",
+    "release": "npm test && npm run build:prod && npm publish",
     "test": "jest"
   },
   "repository": {
@@ -39,5 +41,8 @@
   "peerDependencies": {
     "knockout": "^3.5.1",
     "jQuery": "^1.7.4"
+  },
+  "dependencies": {
+    "rollup-plugin-uglify": "^6.0.4"
   }
 }
